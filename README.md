@@ -10,3 +10,9 @@ Domain: localhost:3000 -> hosting server vercel -> https:express-sysmtem
 - POST -> Create new product -> POST localhost:3000/api/product { name: 'iphone' }
 - PUT -> Update product -> PUT localhost:3000/api/product/3 { name: 'ipad' }
 - DELETE -> delete product -> DELETE localhost:3000/api/product/3
+
+
+
+## mongodb
+user: admin
+pass: 3C1PcMoDkY1hvRTZ

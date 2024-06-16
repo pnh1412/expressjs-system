@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-
+const mongoose = require('mongoose');
 const port = 3000;
+
+const userRoute = require('./src/routes/user.route');
 
 const dataSource = [
   { id: 1, name: 'iphone' },
@@ -10,11 +12,20 @@ const dataSource = [
   { id: 3, name: 'ipad' }
 ];
 
-
 // config
 app.use(cors());
 app.use(express.json({ extend: true }));
 app.use(express.urlencoded({ extended: true }))
+
+// connect DB
+mongoose.connect(
+  'mongodb+srv://admin:3C1PcMoDkY1hvRTZ@cluster0.wn8jwai.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+)
+.catch(error => console.log('Connect fail: ', error))
+
+
+// route
+app.use('/api/user', userRoute);
 
 // GET all list products:
 // GET -> localhost:3000/api/product
@@ -28,12 +39,18 @@ app.get('/api/product', (_, response) => {
   })
 })
 
+function getOneProduct(id) {
+  const product = dataSource.find(product => product.id.toString() === id);
+  return product;
+}
+
 // GET one products:
 // GET -> localhost:3000/api/product/1
 app.get('/api/product/:id', (request, response) => {
   const { id } = request.params;
-  const product = dataSource.find(product => product.id.toString() === id);
   console.log('product: ', product)
+
+  const product = getOneProduct(id);
 
   if(!product) {
     response.status(404).json({
@@ -141,5 +158,5 @@ app.delete('/api/product/:id', (request, response) => {
 
 
 app.listen(port, () => {
-  console.log(`Run localhost:${port}`)
+  console.log(`Server Up and running localhost:${port}`)
 })
